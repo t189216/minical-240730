@@ -1,0 +1,20 @@
+server:
+  port: 8080
+  shutdown: graceful
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+logging:
+  level:
+    com.ll.minical_240730: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.orm.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
+    org.springframework.transaction.interceptor: INFO
+custom:
+  site:
+    cookieDomain: "${custom.production.cookieDomain}"
+    frontUrl: "${custom.production.frontUrl}"
+    backUrl: "${custom.production.backUrl}"
