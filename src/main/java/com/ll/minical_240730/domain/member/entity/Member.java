@@ -24,6 +24,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "member_id")
     private Long id;
 
     private String username;
