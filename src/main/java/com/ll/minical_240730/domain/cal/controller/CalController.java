@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +43,7 @@ public class CalController {
         createForm.getDetails().add(detailForm);
 
         model.addAttribute("createForm", createForm);
+        model.addAttribute("detailForm", detailForm);
         return "domain/cal/create";
     }
 
@@ -57,10 +60,10 @@ public class CalController {
     @Setter
     @Getter
     public static class DetailForm {
-        private String start_date;
-        private String start_time;
-        private String end_date;
-        private String end_time;
+        private LocalDate startDate;
+        private LocalTime startTime;
+        private LocalDate endDate;
+        private LocalTime endTime;
         private boolean isRepeating;
         private String repeatType;
         private Integer repeatInterval;
@@ -74,10 +77,10 @@ public class CalController {
     public String create(@Valid CreateForm createForm) {
         List<CalendarDetail> details = createForm.getDetails().stream()
                 .map(detailForm -> CalendarDetail.builder()
-                        .start_date(detailForm.getStart_date())
-                        .start_time(detailForm.getStart_time())
-                        .end_date(detailForm.getEnd_date())
-                        .end_time(detailForm.getEnd_time())
+                        .startDate(detailForm.getStartDate())
+                        .startTime(detailForm.getStartTime())
+                        .endDate(detailForm.getEndDate())
+                        .endTime(detailForm.getEndTime())
                         .isRepeating(detailForm.isRepeating())
                         .repeatType(detailForm.getRepeatType())
                         .repeatInterval(detailForm.getRepeatInterval())
