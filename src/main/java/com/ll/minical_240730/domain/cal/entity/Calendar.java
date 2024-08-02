@@ -21,7 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class Calendar extends BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "cal_id")
+    @JoinColumn(name = "cal_id")
     private Long id;
 
     private String title;

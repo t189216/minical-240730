@@ -1,7 +1,6 @@
 package com.ll.minical_240730.domain.cal.controller;
 
 import com.ll.minical_240730.domain.cal.entity.Calendar;
-import com.ll.minical_240730.domain.cal.entity.CalendarDetail;
 import com.ll.minical_240730.domain.cal.service.CalService;
 import com.ll.minical_240730.domain.member.sevice.MemberService;
 import com.ll.minical_240730.global.rq.Rq;
@@ -39,11 +38,8 @@ public class CalController {
     @Operation(summary = "달력 폼")
     public String showCal(Model model){
         CreateForm createForm = new CreateForm();
-        DetailForm detailForm = new DetailForm();
-        createForm.getDetails().add(detailForm);
-
         model.addAttribute("createForm", createForm);
-        model.addAttribute("detailForm", detailForm);
+
         return "domain/cal/create";
     }
 
@@ -54,7 +50,6 @@ public class CalController {
         private String title;
         @NotBlank
         private String color;
-        private List<DetailForm> details = new ArrayList<>();
     }
 
     @Setter
@@ -75,22 +70,9 @@ public class CalController {
     @PostMapping("/create")
     @Operation(summary = "달력 폼 처리")
     public String create(@Valid CreateForm createForm) {
-        List<CalendarDetail> details = createForm.getDetails().stream()
-                .map(detailForm -> CalendarDetail.builder()
-                        .startDate(detailForm.getStartDate())
-                        .startTime(detailForm.getStartTime())
-                        .endDate(detailForm.getEndDate())
-                        .endTime(detailForm.getEndTime())
-                        .isRepeating(detailForm.isRepeating())
-                        .repeatType(detailForm.getRepeatType())
-                        .repeatInterval(detailForm.getRepeatInterval())
-                        .location(detailForm.getLocation())
-                        .memo(detailForm.getMemo())
-                        .build())
-                .toList();
-        RsData<Calendar> createRs = calService.create(createForm.getTitle(), createForm.getColor(), details);
+        RsData<Calendar> createRs = calService.create(createForm.getTitle(), createForm.getColor());
 
-        return rq.redirectOrBack(createRs, "/calendar/list");
+        return rq.redirectOrBack(createRs, "/");
     }
 
     @PreAuthorize("isAuthenticated()")

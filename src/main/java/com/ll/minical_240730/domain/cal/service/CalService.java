@@ -1,7 +1,7 @@
 package com.ll.minical_240730.domain.cal.service;
 
 import com.ll.minical_240730.domain.cal.entity.Calendar;
-import com.ll.minical_240730.domain.cal.entity.CalendarDetail;
+import com.ll.minical_240730.domain.cal.repository.CalDetailRepository;
 import com.ll.minical_240730.domain.cal.repository.CalRepository;
 import com.ll.minical_240730.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
@@ -16,20 +16,18 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class CalService {
     private final CalRepository calRepository;
+    private final CalDetailRepository calDetailRepository;
 
+    // 달력 생성
     @Transactional
-    public RsData<Calendar> create(String title, String color, List<CalendarDetail> details) {
+    public RsData<Calendar> create(String title, String color) {
         Calendar calendar = Calendar.builder()
                 .title(title)
                 .color(color)
-                .calendars(details)
                 .build();
-        for (CalendarDetail detail : details) {
-            detail.setCalendar(calendar);
-        }
-
         calRepository.save(calendar);
-        return RsData.of("200", "등록되었습니다.");
+
+        return RsData.of("200-1", "이벤트가 등록되었습니다!");
     }
 
     public List<Calendar> findAll() {

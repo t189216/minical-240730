@@ -6,6 +6,26 @@
 <body>
 <div layout:fragment="content">
     <script>
+        function submitCreateForm(form) {
+            form.title.value = form.title.value.trim();
+
+            if (form.title.value.length == 0) {
+                toastWarning('제목을 입력해주세요.');
+                form.title.focus();
+                return;
+            }
+
+            form.color.value = form.color.value.trim();
+
+            if (form.color.value.length == 0) {
+                toastWarning('색상을 입력해주세요.');
+                form.color.focus();
+                return;
+            }
+            
+            form.submit();
+        }
+
         function toggleRepeatFields(checkbox) {
                 const repeatFields = document.getElementById('repeatFields');
                 if (checkbox.checked) {
@@ -45,59 +65,57 @@
             }
     </script>
 
-    <form th:action="@{/cal/create}" method="POST">
+    <form th:action method="POST" onsubmit="submitCreateForm(this); return false;">
         <div>
-            <label for="title">제목</label>
-            <input type="text" id="title" name="title" th:value="${createForm.title}" required>
+            <label>제목</label>
+            <input type="text" name="title">
         </div>
         <div>
-            <label for="color">색상</label>
-            <input type="text" id="color" name="color" th:value="${createForm.color}" required>
+            <label>색상</label>
+            <input type="text" name="color">
         </div>
 
-        <div th:each="detail, iterStat : ${createForm.details}">
-            <div>
-                <label th:for="'details[' + iterStat.index + '].startDate'">시작 날짜</label>
-                <input type="date" th:id="'details[' + iterStat.index + '].startDate'" th:name="'details[' + iterStat.index + '].startDate'" th:value="${detail.startDate}" required>
-            </div>
-            <div>
-                <label th:for="'details[' + iterStat.index + '].startTime'">시작 시간</label>
-                <input type="time" th:id="'details[' + iterStat.index + '].startTime'" th:name="'details[' + iterStat.index + '].startTime'" th:value="${detail.startTime}">
-            </div>
-            <div>
-                <label th:for="'details[' + iterStat.index + '].endDate'">종료 날짜</label>
-                <input type="date" th:id="'details[' + iterStat.index + '].endDate'" th:name="'details[' + iterStat.index + '].endDate'" th:value="${detail.endDate}">
-            </div>
-            <div>
-                <label th:for="'details[' + iterStat.index + '].endTime'">종료 시간</label>
-                <input type="time" th:id="'details[' + iterStat.index + '].endTime'" th:name="'details[' + iterStat.index + '].endTime'" th:value="${detail.endTime}">
-            </div>
+        <div>
+            <label>시작 날짜</label>
+            <input type="date" name="startDate">
+        </div>
+        <div>
+            <label>시작 시간</label>
+            <input type="time" name="startTime">
+        </div>
+        <div>
+            <label>종료 날짜</label>
+            <input type="date" name="endDate">
+        </div>
+        <div>
+            <label>종료 시간</label>
+            <input type="time" name="endTime">
+        </div>
 
-            <div>
-                <label for="isRepeating">반복</label>
-                <input type="checkbox" id="isRepeating" name="isRepeating" th:checked="${detail.isRepeating}" onclick="toggleRepeatFields(this)">
-            </div>
-            <div id="repeatFields" style="display: none;">
-                <label for="repeatType">반복 유형</label>
-                <select id="repeatType" name="repeatType" onchange="updateRepeatIntervalOptions(this)">
-                    <option value="daily">매일</option>
-                    <option value="weekly">매주</option>
-                    <option value="monthly">매월</option>
-                    <option value="yearly">매년</option>
-                </select>
+        <div>
+            <label>반복</label>
+            <input type="checkbox" name="isRepeating" onclick="toggleRepeatFields(this)">
+        </div>
+        <div id="repeatFields" style="display: none;">
+            <label>반복 유형</label>
+            <select id="repeatType" name="repeatType" onchange="updateRepeatIntervalOptions(this)">
+                <option value="daily">매일</option>
+                <option value="weekly">매주</option>
+                <option value="monthly">매월</option>
+                <option value="yearly">매년</option>
+            </select>
 
-                <label for="repeatInterval">반복 간격</label>
-                <select id="repeatInterval" name="repeatInterval"></select>
-            </div>
+            <label>반복 간격</label>
+            <select id="repeatInterval" name="repeatInterval"></select>
+        </div>
 
-            <div>
-                <label th:for="'details[' + iterStat.index + '].location'">위치</label>
-                <input type="text" th:id="'details[' + iterStat.index + '].location'" th:name="'details[' + iterStat.index + '].location'" th:value="${detail.location}">
-            </div>
-            <div>
-                <label th:for="'details[' + iterStat.index + '].memo'">메모</label>
-                <textarea th:id="'details[' + iterStat.index + '].memo'" th:name="'details[' + iterStat.index + '].memo'"></textarea>
-            </div>
+        <div>
+            <label>위치</label>
+            <input type="text" name="location">
+        </div>
+        <div>
+            <label>메모</label>
+            <input type="text" name="memo">
         </div>
 
         <button type="submit">등록</button>
